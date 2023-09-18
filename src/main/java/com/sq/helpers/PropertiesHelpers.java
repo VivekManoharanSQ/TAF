@@ -17,7 +17,7 @@ public class PropertiesHelpers {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesHelpers.class);
     private static final String TEST_RESOURCES = System.getProperty("user.dir") + "/src/test/resources/properties/";
-    private static Map<String, Properties> propertiesMap = new HashMap<>();
+    private static final Map<String, Properties> propertiesMap = new HashMap<>();
 
 
     private static void loadAllPropertiesFiles() {

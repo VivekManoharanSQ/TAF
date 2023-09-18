@@ -2,7 +2,6 @@ package com.sq.constants;
 
 import com.google.common.collect.ImmutableMap;
 import com.sq.helpers.PropertiesHelpers;
-import com.sq.listeners.TestListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

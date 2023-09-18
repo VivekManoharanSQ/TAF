@@ -1,13 +1,10 @@
 package com.sq.listeners;
 
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
 import com.sq.constants.TafConstants;
 import com.sq.core.DriverFactory;
 import com.sq.core.DriverManager;
 import com.sq.core.ReportManager;
 import com.sq.enums.BrowserType;
-import com.sq.helpers.PropertiesHelpers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.*;
@@ -15,7 +12,6 @@ import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Properties;
 
 public class TestListener implements ISuiteListener, ITestListener, IInvokedMethodListener {
 
