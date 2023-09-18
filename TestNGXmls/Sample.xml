@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Regression Tests">
+    <parameter name="browser1" value="chrome1"/>
+    <listeners>
+        <listener class-name="com.sq.listeners.TestListener"/>
+    </listeners>
+
+    <test name="Client Test on Chrome" parallel="methods">
+        <parameter name="browser1" value="chrome2"/>
+        <classes>
+            <class name="com.sq.SampleTest"/>
+        </classes>
+    </test>
+
+</suite>
