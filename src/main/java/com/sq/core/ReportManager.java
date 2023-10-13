@@ -28,11 +28,12 @@ public class ReportManager {
     private void configureExtentReport() {
         reporter.config().setDocumentTitle(TafConstants.get("reportTitle"));
         reporter.config().setReportName(TafConstants.get("reportName"));
+        reporter.config().thumbnailForBase64(true);
         report.attachReporter(reporter);
     }
 
-    public void createExtentTest(String testName) {
-        setExtentTest(report.createTest(testName));
+    public void createExtentTest(String testName, String[] category) {
+        setExtentTest(report.createTest(testName).assignCategory(category));
     }
 
     public void flushReport() {

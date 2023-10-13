@@ -2,6 +2,7 @@ package com.sq.helpers;
 
 import com.aventstack.extentreports.Status;
 import com.sq.core.ReportManager;
+import com.sq.utils.Screenshot;
 import org.testng.asserts.IAssert;
 import org.testng.asserts.SoftAssert;
 
@@ -13,7 +14,7 @@ public class AssertHelper extends SoftAssert {
                 .getExtentTest()
                 .log(Status.FAIL, var1.getMessage() +
                         "<br> Expected : " + var1.getExpected() +
-                        "<br> Actual : " + var1.getActual());
+                        "<br> Actual : " + var1.getActual(), Screenshot.attachScreenShot());
     }
 
     @Override
