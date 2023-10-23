@@ -1,9 +1,11 @@
 package com.sq.listeners;
 
 import com.sq.constants.TafConstants;
+import com.sq.core.DataManager;
 import com.sq.core.DriverFactory;
 import com.sq.core.DriverManager;
 import com.sq.core.ReportManager;
+import com.sq.datahandler.ExcelReader;
 import com.sq.enums.BrowserType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 public class TestListener implements ISuiteListener, ITestListener, IInvokedMethodListener {
@@ -20,6 +23,9 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
     private static final Logger LOGGER = LoggerFactory.getLogger(TestListener.class);
     private final ReportManager reportManager = new ReportManager();
 
+    private ExcelReader excelReader = null;
+
+    private Map<String, Map<String, String>> mapOfSheets = new HashMap<>();
 
     @Override
     public void onStart(ISuite suite) {
@@ -35,13 +41,16 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
     public void onStart(ITestContext context) {
         Map<String, String> xmlParams = context.getCurrentXmlTest().getAllParameters();
         TafConstants.setExecutionParams(xmlParams);
-        System.out.println(xmlParams.values());
+        if (TafConstants.get("dataSource").equalsIgnoreCase("excel")) {
+            excelReader = new ExcelReader(System.getProperty("user.dir") + "/src/test/resources/datafiles/" +
+                    TafConstants.get("dataFileName"));
+            mapOfSheets = excelReader.getSheetAsMap(TafConstants.get("dataSheetName"));
+        }
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
         DriverManager.getDriver().quit();
-
     }
 
     @Override
@@ -67,6 +76,7 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
 
         checkBrowser(browserType);
         DriverFactory.setDriver(browserType);
+        assignTestData(method);
         createExtentTest(method, testResult);
     }
 
@@ -93,5 +103,12 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
 
     private boolean isAnnotationPresent(IInvokedMethod method, Class clazz) {
         return Arrays.stream(method.getTestMethod().getConstructorOrMethod().getMethod().getAnnotations()).anyMatch(annotation -> annotation.annotationType().equals(clazz));
+    }
+
+    private void assignTestData(IInvokedMethod method) {
+        String methodName = method.getTestMethod().getMethodName();
+        if (mapOfSheets.containsKey(methodName)) {
+            DataManager.setDataMap(mapOfSheets.get(methodName));
+        }
     }
 }

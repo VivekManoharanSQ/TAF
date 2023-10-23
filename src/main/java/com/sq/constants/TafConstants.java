@@ -22,8 +22,8 @@ public abstract class TafConstants {
         else if (DEFAULTS.containsKey(property))
             return DEFAULTS.get(property);
         else {
-            LOGGER.error("Property " + property + " is not defined in the config.properties file hence returning null");
-            return null;
+            LOGGER.error("Property " + property + " is not defined in the config.properties file hence returning empty string");
+            return "";
         }
     }
 

@@ -2,7 +2,6 @@ package com.sq.core;
 
 import com.sq.constants.TafConstants;
 import com.sq.enums.BrowserType;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.SneakyThrows;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -27,11 +26,9 @@ public class DriverFactory {
     private static WebDriver createDriver(String browserType) {
         switch (BrowserType.valueOf(browserType)) {
             case chrome -> {
-                WebDriverManager.chromedriver().setup();
                 return new ChromeDriver();
             }
             case edge -> {
-                WebDriverManager.edgedriver().setup();
                 return new EdgeDriver();
             }
             default -> {
