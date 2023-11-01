@@ -1,4 +1,4 @@
-package com.sq;
+package com.sq.tests;
 
 import com.aventstack.extentreports.Status;
 import com.sq.core.DataManager;
@@ -15,7 +15,7 @@ public class SampleTest {
 
     @Test(testName = "Sample Test1")
     @CustomAttribute(name = "category", values = {"Login"})
-    @Parameters("edge")
+//    @Parameters("edge")
     public void sampleTestMethod1(@Optional String browserType) {
         System.out.println(DataManager.getDataMap());
         DriverManager.getDriver().get("https://testng.org/doc/");

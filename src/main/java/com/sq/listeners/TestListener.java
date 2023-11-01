@@ -1,5 +1,6 @@
 package com.sq.listeners;
 
+import com.aventstack.extentreports.Status;
 import com.sq.constants.TafConstants;
 import com.sq.core.DataManager;
 import com.sq.core.DriverFactory;
@@ -7,6 +8,7 @@ import com.sq.core.DriverManager;
 import com.sq.core.ReportManager;
 import com.sq.datahandler.ExcelReader;
 import com.sq.enums.BrowserType;
+import com.sq.helpers.PropertiesHelpers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.*;
@@ -17,12 +19,12 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class TestListener implements ISuiteListener, ITestListener, IInvokedMethodListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestListener.class);
     private final ReportManager reportManager = new ReportManager();
-
     private ExcelReader excelReader = null;
 
     private Map<String, Map<String, String>> mapOfSheets = new HashMap<>();
@@ -56,6 +58,7 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
     @Override
     public void onTestFailure(ITestResult result) {
         DriverManager.getDriver().quit();
+        ReportManager.getExtentTest().log(Status.FAIL,result.getThrowable().getMessage());
     }
 
     @Override
@@ -73,11 +76,12 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
             LOGGER.info("Setting browser from parameter");
             browserType = params[0];
         }
-
+        System.out.println(browserType);
         checkBrowser(browserType);
         DriverFactory.setDriver(browserType);
         assignTestData(method);
         createExtentTest(method, testResult);
+        DriverManager.getDriver().get(TafConstants.get("url"));
     }
 
     private void checkBrowser(String browserType) {
