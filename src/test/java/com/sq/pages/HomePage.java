@@ -20,12 +20,6 @@ public class HomePage extends WebUI {
 
     @SneakyThrows
     public void clickDocumentationLink() {
-
-//        driver.get("chrome://settings/");
-//        ((JavascriptExecutor)driver).executeScript("chrome.settingsPrivate.setDefaultZoom(0.7);");
-
-        ((JavascriptExecutor) driver).executeScript("document.body.style.transform='scale(0.8)'");
-        driver.get("https://testng.org/doc/");
         Thread.sleep(10000);
         click(link_documentation, "Documentation link");
         click(link_loggingInegration);

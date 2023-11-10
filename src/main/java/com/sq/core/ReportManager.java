@@ -32,8 +32,8 @@ public class ReportManager {
         report.attachReporter(reporter);
     }
 
-    public void createExtentTest(String testName, String[] category) {
-        setExtentTest(report.createTest(testName).assignCategory(category));
+    public void createExtentTest(String browserType, String testName, String[] category) {
+        setExtentTest(report.createTest(testName).assignCategory(category).assignDevice(browserType));
     }
 
     public void flushReport() {

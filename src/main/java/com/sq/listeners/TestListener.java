@@ -8,7 +8,7 @@ import com.sq.core.DriverManager;
 import com.sq.core.ReportManager;
 import com.sq.datahandler.ExcelReader;
 import com.sq.enums.BrowserType;
-import com.sq.helpers.PropertiesHelpers;
+import lombok.Synchronized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.*;
@@ -19,20 +19,14 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 public class TestListener implements ISuiteListener, ITestListener, IInvokedMethodListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestListener.class);
-    private final ReportManager reportManager = new ReportManager();
+    private ReportManager reportManager;
     private ExcelReader excelReader = null;
 
     private Map<String, Map<String, String>> mapOfSheets = new HashMap<>();
-
-    @Override
-    public void onStart(ISuite suite) {
-
-    }
 
     @Override
     public void onFinish(ISuite suite) {
@@ -40,14 +34,13 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
     }
 
     @Override
+    @Synchronized
     public void onStart(ITestContext context) {
+        System.out.println("I am in itest context ");
         Map<String, String> xmlParams = context.getCurrentXmlTest().getAllParameters();
         TafConstants.setExecutionParams(xmlParams);
-        if (TafConstants.get("dataSource").equalsIgnoreCase("excel")) {
-            excelReader = new ExcelReader(System.getProperty("user.dir") + "/src/test/resources/datafiles/" +
-                    TafConstants.get("dataFileName"));
-            mapOfSheets = excelReader.getSheetAsMap(TafConstants.get("dataSheetName"));
-        }
+        if (reportManager == null)
+            reportManager = new ReportManager();
     }
 
     @Override
@@ -58,7 +51,7 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
     @Override
     public void onTestFailure(ITestResult result) {
         DriverManager.getDriver().quit();
-        ReportManager.getExtentTest().log(Status.FAIL,result.getThrowable().getMessage());
+        ReportManager.getExtentTest().log(Status.FAIL, result.getThrowable().getMessage());
     }
 
     @Override
@@ -76,11 +69,18 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
             LOGGER.info("Setting browser from parameter");
             browserType = params[0];
         }
-        System.out.println(browserType);
         checkBrowser(browserType);
         DriverFactory.setDriver(browserType);
+
+        if (TafConstants.get("dataSource").equalsIgnoreCase("excel")) {
+            excelReader = new ExcelReader(System.getProperty("user.dir") + "/src/test/resources/datafiles/" +
+                    TafConstants.get("dataFileName"));
+            mapOfSheets = excelReader.getSheetAsMap(TafConstants.get("dataSheetName"));
+        }
         assignTestData(method);
-        createExtentTest(method, testResult);
+
+        createExtentTest(browserType,method, testResult);
+
         DriverManager.getDriver().get(TafConstants.get("url"));
     }
 
@@ -91,7 +91,7 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
         }
     }
 
-    private void createExtentTest(IInvokedMethod method, ITestResult testResult) {
+    private void createExtentTest(String browserType, IInvokedMethod method, ITestResult testResult) {
         String testName = testResult.getMethod().getConstructorOrMethod().getMethod().getAnnotation(Test.class).testName();
         testName = testName != null ? testName : method.getTestMethod().getMethodName();
         boolean isCustomAttributePresent = isAnnotationPresent(method, CustomAttribute.class);
@@ -102,7 +102,7 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
                 category = method.getTestMethod().getConstructorOrMethod().getMethod().getAnnotation(CustomAttribute.class).values();
             }
         }
-        reportManager.createExtentTest(testName, category);
+        reportManager.createExtentTest(browserType,testName, category);
     }
 
     private boolean isAnnotationPresent(IInvokedMethod method, Class clazz) {

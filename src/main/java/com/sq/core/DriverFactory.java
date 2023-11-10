@@ -2,6 +2,8 @@ package com.sq.core;
 
 import com.sq.constants.TafConstants;
 import com.sq.enums.BrowserType;
+import io.appium.java_client.remote.MobileBrowserType;
+import io.appium.java_client.remote.MobilePlatform;
 import lombok.SneakyThrows;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -30,11 +32,11 @@ public class DriverFactory {
     private static WebDriver createDriver(String browserType) {
         switch (BrowserType.valueOf(browserType)) {
             case chrome -> {
-                Map<String, String> mobileEmulation = new HashMap<>();
-                mobileEmulation.put("deviceName", "Nexus 5");
+//                Map<String, String> mobileEmulation = new HashMap<>();
+//                mobileEmulation.put("deviceName", "Nexus 5");
                 ChromeOptions options = new ChromeOptions();
                 options.addArguments(Objects.requireNonNull(TafConstants.get("chrome.options")).split(","));
-                options.setExperimentalOption("mobileEmulation", mobileEmulation);
+//                options.setExperimentalOption("mobileEmulation", mobileEmulation);
                 return new ChromeDriver(options);
             }
             case edge -> {

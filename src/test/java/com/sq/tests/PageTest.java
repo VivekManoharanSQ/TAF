@@ -18,4 +18,14 @@ public class PageTest {
         sdHomePage.clickOnDocumentation();
         assertHelper.assertAll();
     }
+
+    @Test(testName = "Test_2")
+    @CustomAttribute(name = "category", values = {"Login","smoke"})
+    public void test_2() {
+        WebDriver driver = DriverManager.getDriver();
+        AssertHelper assertHelper = new AssertHelper();
+        SD_HomePage sdHomePage = new SD_HomePage(driver, assertHelper);
+        sdHomePage.clickOnDocumentation();
+        assertHelper.assertAll();
+    }
 }
