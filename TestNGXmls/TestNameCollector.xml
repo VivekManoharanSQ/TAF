@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Regression Tests" parallel="tests">
+
+    <test name="Client Test on Chrome">
+        <packages>
+            <package name="com.sq.tests"/>
+        </packages>
+    </test>
+</suite>
+
+
+
+
+
+

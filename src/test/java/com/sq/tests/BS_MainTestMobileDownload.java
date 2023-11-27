@@ -1,17 +1,14 @@
 package com.sq.tests;
 
-import io.appium.java_client.remote.MobileBrowserType;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
-public class BS_MainTest {
+public class BS_MainTestMobileDownload {
 
 
     public static void main(String[] args) throws InterruptedException, MalformedURLException {

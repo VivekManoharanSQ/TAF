@@ -9,7 +9,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.safari.SafariOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,15 +37,31 @@ public class DriverFactory {
     private static WebDriver createDriver(String browserType) {
         switch (BrowserType.valueOf(browserType)) {
             case chrome -> {
-//                Map<String, String> mobileEmulation = new HashMap<>();
-//                mobileEmulation.put("deviceName", "Nexus 5");
                 ChromeOptions options = new ChromeOptions();
                 options.addArguments(Objects.requireNonNull(TafConstants.get("chrome.options")).split(","));
-//                options.setExperimentalOption("mobileEmulation", mobileEmulation);
                 return new ChromeDriver(options);
             }
             case edge -> {
-                return new EdgeDriver();
+                EdgeOptions options = new EdgeOptions();
+                options.addArguments(Objects.requireNonNull(TafConstants.get("edge.options")).split(","));
+                return new EdgeDriver(options);
+            }
+            case firefox ->{
+                FirefoxOptions options = new FirefoxOptions();
+                options.addArguments(Objects.requireNonNull(TafConstants.get("firefox.options")).split(","));
+                return new FirefoxDriver(options);
+            }
+            case safari -> {
+                SafariOptions options = new SafariOptions();
+                return new SafariDriver(options);
+            }
+            case chromemobile -> {
+                Map<String, String> mobileEmulation = new HashMap<>();
+                mobileEmulation.put("deviceName", "Nexus 5");
+                ChromeOptions options = new ChromeOptions();
+                options.addArguments(Objects.requireNonNull(TafConstants.get("chrome.options")).split(","));
+                options.setExperimentalOption("mobileEmulation", mobileEmulation);
+                return new ChromeDriver(options);
             }
             default -> {
                 LOGGER.error("Incorrect browserType --> " + browserType + "\n Possible values are " + Arrays.toString(BrowserType.values()));

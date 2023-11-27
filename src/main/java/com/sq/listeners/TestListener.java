@@ -36,7 +36,6 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
     @Override
     @Synchronized
     public void onStart(ITestContext context) {
-        System.out.println("I am in itest context ");
         Map<String, String> xmlParams = context.getCurrentXmlTest().getAllParameters();
         TafConstants.setExecutionParams(xmlParams);
         if (reportManager == null)

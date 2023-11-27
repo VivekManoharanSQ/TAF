@@ -22,7 +22,7 @@ public class SD_HomePage {
     public void clickOnDocumentation() {
 
         ReportManager.getExtentTest().log(Status.INFO, "test");
-//        assertHelper.assertEquals(1, 12, "Verify the numbers");
+        assertHelper.assertEquals(1, 12, "Verify the numbers");
         homePage.clickDocumentationLink();
     }
 }
