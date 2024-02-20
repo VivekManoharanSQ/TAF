@@ -1,5 +1,6 @@
 package com.sq.core;
 
+import io.appium.java_client.android.AndroidDriver;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

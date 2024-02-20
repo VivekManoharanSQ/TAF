@@ -10,6 +10,8 @@ public class HomePage extends WebUI {
 
     By link_documentation = By.linkText("Documentation");
     By link_loggingInegration = By.linkText("10 - Logging framework integration in TestNG");
+
+    By intelliJLinkText = By.linkText("IntelliJ's IDEA");
     private WebDriver driver;
 
     public HomePage(WebDriver driver) {
@@ -23,5 +25,9 @@ public class HomePage extends WebUI {
         Thread.sleep(10000);
         click(link_documentation, "Documentation link");
         click(link_loggingInegration);
+    }
+
+    public void getIdeaText(){
+        getText(intelliJLinkText);
     }
 }

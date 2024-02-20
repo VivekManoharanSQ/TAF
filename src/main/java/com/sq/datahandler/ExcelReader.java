@@ -162,5 +162,66 @@ public class ExcelReader {
         }
         return null;
     }
+
+    public List<Map<String, String>> getMultiDataByKey(String sheetName,String dataKey){
+        List<Map<String,String>> mapList = new ArrayList<>();
+        try {
+            List<Map<String, String>> sheetMap = null;
+
+            XSSFSheet sheet = xssfWorkbook.getSheet(sheetName);
+            if (sheet == null) {
+                throw new DataHandlingException("No such sheet as " + sheetName);
+            }
+            sheetMap = convertSheetToList(sheet,dataKey);
+            return sheetMap;
+        } catch (Exception ex) {
+            LOGGER.error("Exception: ", ex);
+        }
+        return null;
+    }
+
+    private List<Map<String, String>> convertSheetToList(XSSFSheet sheet,String dataKey) {
+
+        List<Map<String, String>> sheetMap = new ArrayList<>();
+        int rows = sheet.getPhysicalNumberOfRows();
+        int cols = sheet.getRow(0).getLastCellNum();
+
+        XSSFRow headerRow = sheet.getRow(0);
+        List<String> headerRowNames = new ArrayList<>();
+
+        // Data formatter to handle the cell content as text
+        DataFormatter formatter = new DataFormatter();
+        Cell cellAux;
+        String cellString;
+
+        for (int i = 0; i < cols; i++) {
+            cellAux = headerRow.getCell(i);
+            cellString = formatter.formatCellValue(cellAux);
+            headerRowNames.add(cellString);
+        }
+
+        for (int i = 1; i < rows; i++) {
+            Map<String, String> rowMap = new LinkedHashMap<>();
+            XSSFRow dataRow = sheet.getRow(i);
+            cellAux = dataRow.getCell(0);
+            String key = formatter.formatCellValue(cellAux);
+            if (key == null || key.trim().length() == 0 || !key.equalsIgnoreCase(dataKey)) {
+                continue;
+            }
+            for (int j = 0; j < cols; j++) {
+                try {
+                    XSSFCell cell = dataRow.getCell(j);
+                    // adding for cell format to text
+                    String auxKey = formatter.formatCellValue(cell);
+                    rowMap.put(headerRowNames.get(j), (cell != null) ? auxKey : null);
+                } catch (Exception ex) {
+                    LOGGER.error("Exception: ", ex);
+                    break;
+                }
+            }
+            sheetMap.add(rowMap);
+        }
+        return sheetMap;
+    }
 }
 

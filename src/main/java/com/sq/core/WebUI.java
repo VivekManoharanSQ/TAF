@@ -34,12 +34,13 @@ public class WebUI {
     public WebElement findElement(By by) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeOut));
         try {
-            boolean check = verifyElementVisible(by, timeOut);
+            boolean check = isElementVisible(by, timeOut);
             if (check) {
-                return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+                WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+                scrollToElement(element);
+                return element;
             } else {
-                scrollToElementToTop(by);
-                return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+                Assert.fail("Timeout waiting for the element Visible. " + by.toString());
             }
         } catch (Throwable error) {
             LOGGER.error("Timeout waiting for the element Visible. " + by.toString());
@@ -122,26 +123,31 @@ public class WebUI {
         }
     }
 
-    public boolean verifyElementVisible(By by, long timeout) {
+    public boolean isElementVisible(By by, long timeout) {
         waitForPageLoaded();
 
         try {
             WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(timeout));
-            wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+            scrollToElement(element);
             LOGGER.info("Verify element visible " + by);
             return true;
         } catch (Exception e) {
             LOGGER.error("The element is not visible. " + e.getMessage());
-            Assert.fail("The element is NOT visible. " + by);
             return false;
         }
     }
 
+    public void scrollToElement(WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
+        js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest', behavior: 'smooth'})", element);
+        LOGGER.info("Scroll to element " + element);
+    }
+
     public void scrollToElementToTop(By by) {
         waitForPageLoaded();
-        System.out.println("Scrolling Down");
         JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
-        js.executeScript("arguments[0].scrollIntoView(true);", findElement(by));
+        js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest', behavior: 'smooth'})", findElement(by));
         LOGGER.info("Scroll to element " + by);
     }
 

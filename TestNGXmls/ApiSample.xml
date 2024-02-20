@@ -2,14 +2,13 @@
 
 <suite name="Regression Tests" parallel="tests">
     <listeners>
-        <listener class-name="com.sq.listeners.TestListener"/>
-        <listener class-name="app.getxray.xray.testng.listeners.XrayListener" />
+        <listener class-name="com.sq.listeners.ApiTestListener"/>
     </listeners>
 
     <test name="Client Test on Chrome">
-<!--        <parameter name="browserType" value="chrome"/>-->
+        <parameter name="browserType" value="api"/>
         <classes>
-            <class name="com.sq.tests.BS_AppTest"/>
+            <class name="com.sq.tests.SmarteIsApiTestsModified"/>
         </classes>
     </test>
 <!--    <test name="Client Test on Edge" enabled="false">-->

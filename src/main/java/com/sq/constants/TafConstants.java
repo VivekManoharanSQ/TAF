@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 
 public abstract class TafConstants {
@@ -19,7 +20,6 @@ public abstract class TafConstants {
     public static String get(String property) {
         Map<String, String> tempProperties = propertiesThreadLocal.get();
         if (tempProperties != null && tempProperties.containsKey(property)) {
-            System.out.println(tempProperties.get(property));
             return tempProperties.get(property);
         } else if (DEFAULTS.containsKey(property))
             return DEFAULTS.get(property);
@@ -27,6 +27,11 @@ public abstract class TafConstants {
             LOGGER.error("Property " + property + " is not defined in the config.properties file hence returning empty string");
             return "";
         }
+    }
+
+    public static Map<String, String> getAllKeyContains(String property) {
+        Map<String, String> tempProperties = propertiesThreadLocal.get();
+        return tempProperties.entrySet().stream().filter(k -> k.getKey().contains(property)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public static void setExecutionParams(Map<String, String> xmlParams) {

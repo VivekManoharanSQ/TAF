@@ -14,14 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.*;
 import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TestListener implements ISuiteListener, ITestListener, IInvokedMethodListener {
+public class ApiTestListener implements ISuiteListener, ITestListener, IInvokedMethodListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApiTestListener.class);
     private ReportManager reportManager;
     private ExcelReader excelReader = null;
 
@@ -43,45 +44,33 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        DriverManager.getDriver().quit();
+
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
-        DriverManager.getDriver().quit();
         ReportManager.getExtentTest().log(Status.FAIL, result.getThrowable().getMessage());
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        DriverManager.getDriver().quit();
+
     }
 
     @Override
     public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
-        if (method.isTestMethod()) {
-            boolean isParameterPresent = isAnnotationPresent(method, Parameters.class);
-            String[] params = isParameterPresent ? method.getTestMethod().getConstructorOrMethod().getMethod().getAnnotation(Parameters.class).value() : new String[]{};
-            String browserType = TafConstants.get("browserType");
-            if (isParameterPresent && params.length > 0) {
-                // First parameter is the browser
-                LOGGER.info("Setting browser from parameter");
-                browserType = params[0];
-            }
-            checkBrowser(browserType);
-            DriverFactory.setDriver(browserType);
+        boolean isParameterPresent = isAnnotationPresent(method, Parameters.class);
+        String[] params = isParameterPresent ? method.getTestMethod().getConstructorOrMethod().getMethod().getAnnotation(Parameters.class).value() : new String[]{};
+        String browserType = TafConstants.get("browserType");
 
-            if (TafConstants.get("dataSource").equalsIgnoreCase("excel")) {
-                excelReader = new ExcelReader(System.getProperty("user.dir") + "/src/test/resources/datafiles/" +
-                        TafConstants.get("dataFileName"));
-                mapOfSheets = excelReader.getSheetAsMap(TafConstants.get("dataSheetName"));
-                assignTestData(method);
-            }
-
-            createExtentTest(browserType, method, testResult);
-            if (!browserType.equalsIgnoreCase("androidnative") && !browserType.equalsIgnoreCase("iosnative"))
-                DriverManager.getDriver().get(TafConstants.get("url"));
+        if (TafConstants.get("dataSource").equalsIgnoreCase("excel")) {
+            excelReader = new ExcelReader(System.getProperty("user.dir") + "/src/test/resources/datafiles/" +
+                    TafConstants.get("dataFileName"));
+            mapOfSheets = excelReader.getSheetAsMap(TafConstants.get("dataSheetName"));
         }
+        assignTestData(method);
+
+        createExtentTest(browserType, method, testResult);
     }
 
     private void checkBrowser(String browserType) {
@@ -92,7 +81,7 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
     }
 
     private void createExtentTest(String browserType, IInvokedMethod method, ITestResult testResult) {
-        String testName = testResult.getTestName();
+        String testName = testResult.getMethod().getConstructorOrMethod().getMethod().getAnnotation(Test.class).testName();
         testName = testName != null ? testName : method.getTestMethod().getMethodName();
         boolean isCategoryPresent = isAnnotationPresent(method, Category.class);
         String[] category = new String[]{};

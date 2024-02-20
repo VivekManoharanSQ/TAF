@@ -4,6 +4,7 @@ import com.aventstack.extentreports.Status;
 import com.sq.core.ReportManager;
 import com.sq.helpers.AssertHelper;
 import com.sq.pages.HomePage;
+import com.sq.utils.Screenshot;
 import org.openqa.selenium.WebDriver;
 
 public class SD_HomePage {
@@ -24,5 +25,7 @@ public class SD_HomePage {
         ReportManager.getExtentTest().log(Status.INFO, "test");
         assertHelper.assertEquals(1, 12, "Verify the numbers");
         homePage.clickDocumentationLink();
+        homePage.getIdeaText();
+        ReportManager.getExtentTest().log(Status.INFO,Screenshot.attachScreenShot());
     }
 }

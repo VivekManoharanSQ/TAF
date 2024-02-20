@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>TAF</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>com.sq.automation</groupId>
+    <artifactId>sq-taf</artifactId>
+    <version>1.0</version>
 
     <properties>
         <selenium.version>4.15.0</selenium.version>
@@ -77,7 +77,30 @@
             <artifactId>opencsv</artifactId>
             <version>5.8</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.4.2</version>
+            <type>maven-plugin</type>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.4.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.16.0</version>
+        </dependency>
+        <dependency>
+            <groupId>app.getxray</groupId>
+            <artifactId>xray-testng-extensions</artifactId>
+            <version>0.2.0-beta</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -89,6 +112,45 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>${project.basedir}/TestNGXmls/Sample.xml </suiteXmlFile>
                     </suiteXmlFiles>
+                    <properties>
+                        <property>
+                            <name>reporter</name>
+                            <value>org.testng.reporters.XMLReporter:generateTestResultAttributes=true</value>
+                        </property>
+                    </properties>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <appendAssemblyId>true</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>app.getxray</groupId>
+                <artifactId>xray-maven-plugin</artifactId>
+                <version>0.7.3</version>
+                <configuration>
+                    <cloud>true</cloud>
+                    <projectKey>SQMS</projectKey>
+                    <reportFormat>testng</reportFormat>
+                    <clientId>42B42CD4AACA4C479A99ECD868D808C9</clientId>
+                    <clientSecret>e4b942a4f40aac6333ee655513cd4aec169dfe95c2e9ff5fa43eb8fbbae7a3d4e</clientSecret>
+                    <reportFile>target/surefire-reports/testng-results.xml</reportFile>
+                    <testPlanKey>SQMS-9</testPlanKey>
                 </configuration>
             </plugin>
         </plugins>
