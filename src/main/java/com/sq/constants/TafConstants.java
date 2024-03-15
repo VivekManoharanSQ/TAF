@@ -47,7 +47,6 @@ public abstract class TafConstants {
             }
         });
         propertiesThreadLocal.set(tempMap);
-
     }
 
 }

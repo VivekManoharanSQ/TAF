@@ -33,7 +33,7 @@ public class PageTest implements ITest {
         assertHelper.assertAll();
     }
 
-    //    @Test(testName = "Test_2")
+        @Test(testName = "Test_2")
     @CustomAttribute(name = "category", values = {"Login", "smoke"})
     public void test_2() {
         WebDriver driver = DriverManager.getDriver();

@@ -4,6 +4,7 @@ import com.sq.constants.TafConstants;
 import com.sq.enums.BrowserType;
 import com.sq.enums.DeviceFarmType;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.remote.AutomationName;
 import lombok.SneakyThrows;
 import org.openqa.selenium.WebDriver;
@@ -100,7 +101,7 @@ public class DriverFactory {
             case iosnative -> {
                 capabilities.merge(mapToCapabilities(propsToMap("ios.")));
                 capabilities.setCapability("automationName", AutomationName.IOS_XCUI_TEST);
-                return new AndroidDriver(new URL(remoteUrl), capabilities);
+                return new IOSDriver(new URL(remoteUrl), capabilities);
             }
             default -> {
                 LOGGER.error("Incorrect browserType --> " + browserType + "\n Possible values are " + Arrays.toString(BrowserType.values()));

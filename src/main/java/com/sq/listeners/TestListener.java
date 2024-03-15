@@ -27,6 +27,8 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
 
     private Map<String, Map<String, String>> mapOfSheets = new HashMap<>();
 
+    private Map<String,String> xmlParams;
+
     @Override
     public void onFinish(ISuite suite) {
         reportManager.flushReport();
@@ -35,8 +37,8 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
     @Override
     @Synchronized
     public void onStart(ITestContext context) {
-        Map<String, String> xmlParams = context.getCurrentXmlTest().getAllParameters();
-        TafConstants.setExecutionParams(xmlParams);
+        xmlParams = context.getCurrentXmlTest().getAllParameters();
+         TafConstants.setExecutionParams(xmlParams);
         if (reportManager == null)
             reportManager = new ReportManager();
     }
@@ -59,6 +61,7 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
 
     @Override
     public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
+        TafConstants.setExecutionParams(xmlParams);
         if (method.isTestMethod()) {
             boolean isParameterPresent = isAnnotationPresent(method, Parameters.class);
             String[] params = isParameterPresent ? method.getTestMethod().getConstructorOrMethod().getMethod().getAnnotation(Parameters.class).value() : new String[]{};
@@ -94,8 +97,8 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
     private void createExtentTest(String browserType, IInvokedMethod method, ITestResult testResult) {
         String testName = testResult.getTestName();
         testName = testName != null ? testName : method.getTestMethod().getMethodName();
-        boolean isCategoryPresent = isAnnotationPresent(method, Category.class);
-        String[] category = new String[]{};
+        String[] category = new String[]{};        boolean isCategoryPresent = isAnnotationPresent(method, Category.class);
+
         if (isCategoryPresent) {
             category = method.getTestMethod().getConstructorOrMethod().getMethod().getAnnotation(Category.class).categories();
         }

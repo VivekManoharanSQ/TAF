@@ -1,6 +1,9 @@
 package com.sq.core;
 
 import com.sq.constants.TafConstants;
+import com.sq.utils.Direction;
+import com.sq.utils.FingerGestureUtils;
+import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -17,9 +20,9 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
-public class WebUI {
+public class MobileUI {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WebUI.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MobileUI.class);
 
     private WebDriver driver;
 
@@ -27,7 +30,7 @@ public class WebUI {
 
     private long timeOut = Long.parseLong(TafConstants.get("explicitWait"));
 
-    public WebUI(WebDriver driver) {
+    public MobileUI(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -124,7 +127,7 @@ public class WebUI {
     }
 
     public boolean isElementVisible(By by, long timeout) {
-        waitForPageLoaded();
+//        waitForPageLoaded();
 
         try {
             WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(timeout));
@@ -139,13 +142,13 @@ public class WebUI {
     }
 
     public void scrollToElement(WebElement element) {
-        JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
-        js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest', behavior: 'smooth'})", element);
-        LOGGER.info("Scroll to element " + element);
+//        JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
+//        js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest', behavior: 'smooth'})", element);
+//        LOGGER.info("Scroll to element " + element);
     }
 
     public void scrollToElementToTop(By by) {
-        waitForPageLoaded();
+//        waitForPageLoaded();
         JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
         js.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'nearest', behavior: 'smooth'})", findElement(by));
         LOGGER.info("Scroll to element " + by);
@@ -160,5 +163,13 @@ public class WebUI {
             else
                 ReportManager.getExtentTest().pass(event + by);
         }
+    }
+
+    public void swipe(final Direction direction, final int distance) {
+        swipe(direction, null, distance);
+    }
+
+    public void swipe(final Direction direction, final WebElement elememnt, final int distance) {
+        new FingerGestureUtils((AppiumDriver) driver).swipe(direction, element, distance);
     }
 }

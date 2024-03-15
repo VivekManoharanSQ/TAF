@@ -101,6 +101,12 @@
             <version>0.2.0-beta</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -110,7 +116,7 @@
                 <version>3.2.1</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>${project.basedir}/TestNGXmls/Sample.xml </suiteXmlFile>
+                        <suiteXmlFile>${project.basedir}/TestNGXmls/Sample.xml</suiteXmlFile>
                     </suiteXmlFiles>
                     <properties>
                         <property>
