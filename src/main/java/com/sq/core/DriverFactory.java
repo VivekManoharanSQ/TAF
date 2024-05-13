@@ -139,10 +139,10 @@ public class DriverFactory {
                 capabilities.setCapability("bstack:options", propsToMap("browserstackoptions"));
             }
             case lambdatest -> {
-                capabilities.setCapability("lambda:options", propsToMap("lambda.options"));
-
+                capabilities.setCapability("lambda:options", propsToMap("lambdatestoptions"));
             }
-            case seetest -> {
+            default ->{
+                return capabilities;
             }
         }
         return capabilities;

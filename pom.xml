@@ -11,10 +11,9 @@
     <properties>
         <selenium.version>4.15.0</selenium.version>
         <testng.version>7.8.0</testng.version>
-        <maven.compiler.source>20</maven.compiler.source>
-        <maven.compiler.target>20</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
-
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
         <dependency>
@@ -124,6 +123,14 @@
                             <value>org.testng.reporters.XMLReporter:generateTestResultAttributes=true</value>
                         </property>
                     </properties>
+<!--                    <systemPropertyVariables>-->
+<!--                        <http.proxyHost></http.proxyHost>-->
+<!--                        <http.proxyPort></http.proxyPort>-->
+<!--                        <http.proxyUser>your_username</http.proxyUser>-->
+<!--                        <http.proxyPassword>your_password</http.proxyPassword>-->
+<!--                        <nonProxyHosts>localhost|127.0.0.1</nonProxyHosts>-->
+<!--                    </systemPropertyVariables>-->
+<!--                    <argLine>-Djava.net.useSystemProxies=true -Dproxy.pac.url=http://proxy.example.com/proxy.pac</argLine>-->
                 </configuration>
             </plugin>
             <plugin>

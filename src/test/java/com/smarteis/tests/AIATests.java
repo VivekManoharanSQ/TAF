@@ -1,6 +1,6 @@
-package com.aia.alpa.tests;
+package com.smarteis.tests;
 
-import com.aia.alpa.testdef.TD_LoginPage;
+import com.smarteis.testdef.TD_LoginPage;
 import com.sq.core.DriverManager;
 import com.sq.database.DBSingleton;
 import com.sq.helpers.AssertHelper;

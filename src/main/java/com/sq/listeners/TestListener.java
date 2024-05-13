@@ -27,18 +27,21 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
 
     private Map<String, Map<String, String>> mapOfSheets = new HashMap<>();
 
-    private Map<String,String> xmlParams;
+    private Map<String, String> xmlParams;
 
     @Override
     public void onFinish(ISuite suite) {
-        reportManager.flushReport();
+        if (TafConstants.get("splitReport").equalsIgnoreCase("true"))
+            reportManager.splitReport();
+        else
+            reportManager.flushReport();
     }
 
     @Override
     @Synchronized
     public void onStart(ITestContext context) {
         xmlParams = context.getCurrentXmlTest().getAllParameters();
-         TafConstants.setExecutionParams(xmlParams);
+        TafConstants.setExecutionParams(xmlParams);
         if (reportManager == null)
             reportManager = new ReportManager();
     }
@@ -97,7 +100,8 @@ public class TestListener implements ISuiteListener, ITestListener, IInvokedMeth
     private void createExtentTest(String browserType, IInvokedMethod method, ITestResult testResult) {
         String testName = testResult.getTestName();
         testName = testName != null ? testName : method.getTestMethod().getMethodName();
-        String[] category = new String[]{};        boolean isCategoryPresent = isAnnotationPresent(method, Category.class);
+        String[] category = new String[]{};
+        boolean isCategoryPresent = isAnnotationPresent(method, Category.class);
 
         if (isCategoryPresent) {
             category = method.getTestMethod().getConstructorOrMethod().getMethod().getAnnotation(Category.class).categories();

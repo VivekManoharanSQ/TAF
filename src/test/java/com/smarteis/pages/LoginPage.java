@@ -1,4 +1,4 @@
-package com.aia.alpa.pages;
+package com.smarteis.pages;
 
 import com.sq.core.MobileUI;
 import com.sq.core.WebUI;

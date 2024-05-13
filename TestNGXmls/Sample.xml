@@ -8,7 +8,7 @@
 
     <test name="Client Test on Edge">
         <classes>
-            <class name="com.aia.alpa.tests.AIATests"/>
+            <class name="com.sq.tests.PageTest"/>
         </classes>
     </test>
 </suite>

@@ -2,8 +2,11 @@ package com.sq.core;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.model.Test;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.sq.constants.TafConstants;
+
+import java.util.List;
 
 public class ReportManager {
 
@@ -40,4 +43,25 @@ public class ReportManager {
         report.flush();
     }
 
+    public void splitReport() {
+        int noOfTestsPerReport = Integer.parseInt(TafConstants.get("noOfTestsPerReport"));
+        ExtentSparkReporter reporter;
+        ExtentReports splitReport;
+        List<Test> testList = report.getReport().getTestList();
+        int k = 0;
+        int noOfReports = testList.size() % noOfTestsPerReport == 0 ? testList.size() / noOfTestsPerReport : testList.size() / noOfTestsPerReport + 1;
+        for (int j = 1; j <= noOfReports; j++) {
+            splitReport = new ExtentReports();
+            reporter = new ExtentSparkReporter(System.getProperty("user.dir") + "/" + TafConstants.get("reportPath") + "/" + TafConstants.get("reportFileName") + j + ".html");
+            splitReport.attachReporter(reporter);
+            for (int i = k; i < testList.size(); i++) {
+                splitReport.getReport().addTest(testList.get(i));
+                k++;
+                if (k % noOfTestsPerReport == 0) {
+                    break;
+                }
+            }
+            splitReport.flush();
+        }
+    }
 }

@@ -1,6 +1,6 @@
-package com.aia.alpa.testdef;
+package com.smarteis.testdef;
 
-import com.aia.alpa.pages.LoginPage;
+import com.smarteis.pages.LoginPage;
 import com.sq.helpers.AssertHelper;
 import org.openqa.selenium.WebDriver;
 
