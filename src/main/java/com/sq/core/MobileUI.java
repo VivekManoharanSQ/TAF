@@ -54,23 +54,28 @@ public class MobileUI {
 
     public void sendKeys(By by, String textToEnter, String... elementName) {
         findElement(by).sendKeys(textToEnter);
-        logEventStep("Entered text \"" + textToEnter + "\" into ", by, elementName);
+        logEventStep("Entered text \"" + textToEnter + "\" into ", elementName);
     }
 
     public void click(By by, String... elementName) {
         findElement(by).click();
-        logEventStep("Clicked on the element ", by, elementName);
+        logEventStep("Clicked on the element ", elementName);
+    }
+
+    public void clear(By by, String... elementName) {
+        findElement(by).clear();
+        logEventStep("Clicked on the element ", elementName);
     }
 
     public String getText(By by, String... elementName) {
         String text = findElement(by).getText();
-        logEventStep("Fetched text \"" + text + "\" from ", by, elementName);
+        logEventStep("Fetched text \"" + text + "\" from ", elementName);
         return text;
     }
 
     public String getAttribute(By by, String attributeName, String... elementName) {
         String attributeValue = findElement(by).getAttribute(attributeName);
-        logEventStep("Fetched  " + attributeName + " = \"" + attributeValue + "\" from ", by, elementName);
+        logEventStep("Fetched  " + attributeName + " = \"" + attributeValue + "\" from ", elementName);
         return attributeValue;
     }
 
@@ -154,14 +159,11 @@ public class MobileUI {
         LOGGER.info("Scroll to element " + by);
     }
 
-    public void logEventStep(String event, By by, String... elementName) {
+    public void logEventStep(String event, String... elementName) {
         if (elementName.length > 0)
             LOGGER.info("Clicked on the " + elementName[0]);
-        if (ReportManager.getExtentTest() != null) {
-            if (elementName.length > 0)
-                ReportManager.getExtentTest().pass(event + elementName[0]);
-            else
-                ReportManager.getExtentTest().pass(event + by);
+        if (ReportManager.getExtentTest() != null && elementName.length > 0) {
+            ReportManager.getExtentTest().pass(event + elementName[0]);
         }
     }
 
@@ -169,7 +171,7 @@ public class MobileUI {
         swipe(direction, null, distance);
     }
 
-    public void swipe(final Direction direction, final WebElement elememnt, final int distance) {
+    public void swipe(final Direction direction, final WebElement element, final int distance) {
         new FingerGestureUtils((AppiumDriver) driver).swipe(direction, element, distance);
     }
 }

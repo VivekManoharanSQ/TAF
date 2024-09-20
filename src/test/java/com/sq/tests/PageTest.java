@@ -9,7 +9,6 @@ import com.sq.helpers.AssertHelper;
 import com.sq.stepdefs.SD_HomePage;
 import com.sq.utils.Screenshot;
 import org.openqa.selenium.WebDriver;
-import org.testng.ITest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.CustomAttribute;
 import org.testng.annotations.DataProvider;
@@ -24,7 +23,7 @@ public class PageTest {
 //        testNames.set(testData[0] + "1");
     }
 
-    @Test(testName = "Test_1",dataProvider = "logindata")
+    @Test(testName = "Test_1", dataProvider = "logindata")
     @Category(categories = {"Login"})
     public void test_1(int i) {
         ReportManager.getExtentTest().log(Status.INFO, String.valueOf(i));
@@ -34,13 +33,15 @@ public class PageTest {
 //        sdHomePage.clickOnDocumentation();
         Media m = Screenshot.attachScreenShot();
 
-        for(int j=0;j<=42;j++){
-            ReportManager.getExtentTest().log(Status.INFO,"Test",m);
-        }
+//        for(int j=0;j<=42;j++){
+//            ReportManager.getExtentTest().log(Status.INFO,"Test",m);
+//        }
+        ReportManager.getExtentTest().log(Status.INFO, "Test", m);
+
         assertHelper.assertAll();
     }
 
-//        @Test(testName = "Test_2")
+    //        @Test(testName = "Test_2")
     @CustomAttribute(name = "category", values = {"Login", "smoke"})
     public void test_2() {
         WebDriver driver = DriverManager.getDriver();
@@ -54,22 +55,22 @@ public class PageTest {
     public Object[][] dataPovider() {
         return new Object[][]{
                 {1}
-                ,
-                {2},
-                {3},{4},{5},{6},{7},{8},{9},{10},{1},
-                {2},
-                {3},{4},{5},{6},{7},{8},{9},{10},{1},
-                {2},
-                {3},{4},{5},{6},{7},{8},{9},{10},{1},
-                {2},
-                {3},{4},{5},{6},{7},{8},{9},{10},{1},
-                {2},
-                {3},{4},{5},{6},{7},{8},{9},{10}
+//                ,
+//                {2},
+//                {3},{4},{5},{6},{7},{8},{9},{10},{1},
+//                {2},
+//                {3},{4},{5},{6},{7},{8},{9},{10},{1},
+//                {2},
+//                {3},{4},{5},{6},{7},{8},{9},{10},{1},
+//                {2},
+//                {3},{4},{5},{6},{7},{8},{9},{10},{1},
+//                {2},
+//                {3},{4},{5},{6},{7},{8},{9},{10}
         };
 
     }
 
-//    @Override
+    //    @Override
     public String getTestName() {
         return testNames.get();
     }

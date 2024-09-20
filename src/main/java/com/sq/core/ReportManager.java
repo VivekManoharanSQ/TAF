@@ -53,6 +53,9 @@ public class ReportManager {
         for (int j = 1; j <= noOfReports; j++) {
             splitReport = new ExtentReports();
             reporter = new ExtentSparkReporter(System.getProperty("user.dir") + "/" + TafConstants.get("reportPath") + "/" + TafConstants.get("reportFileName") + j + ".html");
+            reporter.config().setDocumentTitle(TafConstants.get("reportTitle"));
+            reporter.config().setReportName(TafConstants.get("reportName"));
+            reporter.config().thumbnailForBase64(true);
             splitReport.attachReporter(reporter);
             for (int i = k; i < testList.size(); i++) {
                 splitReport.getReport().addTest(testList.get(i));
@@ -62,6 +65,16 @@ public class ReportManager {
                 }
             }
             splitReport.flush();
+        }
+    }
+
+
+    public void createSplitReport() {
+        int noOfTestsPerReport = Integer.parseInt(TafConstants.get("noOfTestsPerReport"));
+        List<Test> testList = report.getReport().getTestList();
+        if (testList.size() == noOfTestsPerReport) {
+            report.flush();
+            report.attachReporter();
         }
     }
 }

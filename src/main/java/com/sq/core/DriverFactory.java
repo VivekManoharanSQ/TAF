@@ -68,47 +68,53 @@ public class DriverFactory {
         }
     }
 
-    @SneakyThrows
+
     private static WebDriver createDriver(String browserType, String remoteUrl) {
         DesiredCapabilities capabilities = getDeviceFarmCapabilities(browserType);
-        switch (BrowserType.valueOf(browserType)) {
-            case chrome -> {
-                ChromeOptions chromeOptions = getChromeOption().merge(capabilities);
-                return new RemoteWebDriver(new URL(remoteUrl), chromeOptions);
+        try {
+            switch (BrowserType.valueOf(browserType)) {
+                case chrome -> {
+                    ChromeOptions chromeOptions = getChromeOption().merge(capabilities);
+                    return new RemoteWebDriver(new URL(remoteUrl), chromeOptions);
+                }
+                case edge -> {
+                    return new RemoteWebDriver(new URL(remoteUrl), getEdgeOption().merge(capabilities));
+                }
+                case firefox -> {
+                    return new RemoteWebDriver(new URL(remoteUrl), getFirefoxOption().merge(capabilities));
+                }
+                case safari -> {
+                    return new RemoteWebDriver(new URL(remoteUrl), getSafariOption().merge(capabilities));
+                }
+                case chromemobile -> {
+                    Map<String, String> mobileEmulation = new HashMap<>();
+                    mobileEmulation.put("deviceName", "Nexus 5");
+                    ChromeOptions options = new ChromeOptions();
+                    options.addArguments(Objects.requireNonNull(TafConstants.get("chrome.options")).split(","));
+                    options.setExperimentalOption("mobileEmulation", mobileEmulation);
+                    return new RemoteWebDriver(new URL(remoteUrl), options.merge(capabilities));
+                }
+                case androidnative -> {
+                    capabilities.merge(mapToCapabilities(propsToMap("android.")));
+                    capabilities.setCapability("automationName", AutomationName.ANDROID_UIAUTOMATOR2);
+                    return new AndroidDriver(new URL(remoteUrl), capabilities);
+                }
+                case iosnative -> {
+                    capabilities.merge(mapToCapabilities(propsToMap("ios.")));
+                    capabilities.setCapability("automationName", AutomationName.IOS_XCUI_TEST);
+                    return new IOSDriver(new URL(remoteUrl), capabilities);
+                }
+                default -> {
+                    LOGGER.error("Incorrect browserType --> " + browserType + "\n Possible values are " + Arrays.toString(BrowserType.values()));
+                    System.exit(1);
+                    return null;
+                }
             }
-            case edge -> {
-                return new RemoteWebDriver(new URL(remoteUrl), getEdgeOption().merge(capabilities));
-            }
-            case firefox -> {
-                return new RemoteWebDriver(new URL(remoteUrl), getFirefoxOption().merge(capabilities));
-            }
-            case safari -> {
-                return new RemoteWebDriver(new URL(remoteUrl), getSafariOption().merge(capabilities));
-            }
-            case chromemobile -> {
-                Map<String, String> mobileEmulation = new HashMap<>();
-                mobileEmulation.put("deviceName", "Nexus 5");
-                ChromeOptions options = new ChromeOptions();
-                options.addArguments(Objects.requireNonNull(TafConstants.get("chrome.options")).split(","));
-                options.setExperimentalOption("mobileEmulation", mobileEmulation);
-                return new RemoteWebDriver(new URL(remoteUrl), options.merge(capabilities));
-            }
-            case androidnative -> {
-                capabilities.merge(mapToCapabilities(propsToMap("android.")));
-                capabilities.setCapability("automationName", AutomationName.ANDROID_UIAUTOMATOR2);
-                return new AndroidDriver(new URL(remoteUrl), capabilities);
-            }
-            case iosnative -> {
-                capabilities.merge(mapToCapabilities(propsToMap("ios.")));
-                capabilities.setCapability("automationName", AutomationName.IOS_XCUI_TEST);
-                return new IOSDriver(new URL(remoteUrl), capabilities);
-            }
-            default -> {
-                LOGGER.error("Incorrect browserType --> " + browserType + "\n Possible values are " + Arrays.toString(BrowserType.values()));
-                System.exit(1);
-                return null;
-            }
+        }catch (Exception e){
+            e.printStackTrace();
+            System.exit(1);
         }
+        return null;
     }
 
 
