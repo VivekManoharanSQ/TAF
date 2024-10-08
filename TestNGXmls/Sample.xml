@@ -9,8 +9,8 @@
     <test name="PDF Test Compare">
         <classes>
 <!--            <class name="com.sq.tests.PDFCompTest"/>-->
-            <class name="com.sq.tests.PageTest"/>
-
+<!--            <class name="com.sq.tests.LoginTests"/>-->
+            <class name="com.sq.tests.BS_AppTest"/>
         </classes>
     </test>
 </suite>

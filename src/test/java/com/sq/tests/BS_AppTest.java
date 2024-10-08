@@ -36,7 +36,7 @@ public class BS_AppTest {
         caps.setCapability("deviceName", "OnePlus 7T");
         caps.setCapability("platformName", "android");
         caps.setCapability("interactiveDebugging", true);
-        caps.setCapability("app", "bs://56c29a2122299598009dcd560a61c6dcb0adf023");
+        caps.setCapability("app", "bs://128ecd709ca34d8c6df924733d4f298e9e335c2a");
         caps.setCapability("automationName", AutomationName.ANDROID_UIAUTOMATOR2);
         caps.setCapability("platformVersion", "10.0");
         WebDriver driver = new AndroidDriver(new URL("https://skillquotient_L2l6gB:b6axfXNe6QHp8HMmU5nq@hub-cloud.browserstack.com/wd/hub"), caps);

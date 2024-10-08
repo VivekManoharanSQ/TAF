@@ -88,7 +88,7 @@ public class WebUI {
     }
 
     public void selectOptionByVisibleText(By by, String visibleText) {
-        getSelect(by).selectByValue(visibleText);
+        getSelect(by).selectByVisibleText(visibleText);
     }
 
     public List<WebElement> findElements(By by) {

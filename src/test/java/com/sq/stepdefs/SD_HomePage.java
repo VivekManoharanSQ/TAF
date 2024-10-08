@@ -5,9 +5,12 @@ import com.sq.core.ReportManager;
 import com.sq.helpers.AssertHelper;
 import com.sq.pages.HomePage;
 import com.sq.utils.Screenshot;
+import lombok.SneakyThrows;
 import org.openqa.selenium.WebDriver;
 
-public class SD_HomePage {
+import java.util.List;
+
+public class SD_HomePage extends HomePage {
 
     private WebDriver driver;
 
@@ -15,17 +18,25 @@ public class SD_HomePage {
     private HomePage homePage;
 
     public SD_HomePage(WebDriver driver, AssertHelper assertHelper) {
+        super(driver);
         this.driver = driver;
         this.homePage = new HomePage(driver);
         this.assertHelper = assertHelper;
     }
 
-    public void clickOnDocumentation() {
+    @SneakyThrows
+    public void loginToApp(String idType, String idValue, String password) {
+        homePage.selectLanguage();
+        ReportManager.getExtentTest().log(Status.INFO, "App Launched Auccessfully", Screenshot.attachScreenShot());
+        Thread.sleep(2000);
+        homePage.selectIdType(idType);
+        homePage.enterIdValue(idValue);
+        homePage.clickSubmit();
+    }
 
-        ReportManager.getExtentTest().log(Status.INFO, "test");
-        assertHelper.assertEquals(1, 12, "Verify the numbers");
-        homePage.clickDocumentationLink();
-        homePage.getIdeaText();
-        ReportManager.getExtentTest().log(Status.INFO,Screenshot.attachScreenShot());
+
+    public void verifyTheDropDownValues(List<String> expectedList) {
+        ReportManager.getExtentTest().log(Status.INFO, "App Launched Auccessfully", Screenshot.attachScreenShot());
+        assertHelper.assertEquals(homePage.getIdTypeList(), expectedList, "Verify the list of options");
     }
 }
